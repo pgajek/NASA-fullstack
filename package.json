@@ -1,0 +1,26 @@
+{
+  "name": "nasa-fullstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "npm install --prefix server",
+    "install-frontend": "npm install --prefix frontend",
+    "install-full": "npm install --prefix server && npm install --prefix frontend",
+    "server": "npm run watch --prefix server",
+    "frontend": "npm start --prefix frontend",
+    "watch": "npm run server & npm run frontend",
+    "test": "npm run test --prefix server && npm run test --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pgajek/NASA-fullstack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pgajek/NASA-fullstack/issues"
+  },
+  "homepage": "https://github.com/pgajek/NASA-fullstack#readme"
+}
