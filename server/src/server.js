@@ -4,6 +4,14 @@ const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
 
-server.listen(PORT, () => {
-  console.log(`Server listen on port ${PORT}`);
-});
+const { loadPlanetsData } = require("./models/planets.model");
+
+async function startServer() {
+  await loadPlanetsData();
+
+  server.listen(PORT, () => {
+    console.log(`Server listen on port ${PORT}`);
+  });
+}
+
+startServer();
