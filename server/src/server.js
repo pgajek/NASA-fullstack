@@ -5,9 +5,8 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
-const MONGO_URL =
-  "mongodb+srv://redooo25:redooo25@dashboard-nasa.mxpvd5z.mongodb.net/?retryWrites=true&w=majority&appName=Dashboard-nasa";
-// const MONGO_URL = process.env.MONGO_URL;
+
+const MONGO_URL = process.env.MONGO_URL;
 
 const { loadPlanetsData } = require("./models/planets.model");
 
