@@ -32,13 +32,19 @@ const httpScheduleNewLaunch = async (req, res) => {
 
   return res.status(201).json(launch);
 };
+
 async function httpAbortLaunch(req, res) {
   const launchId = Number(req.params.id);
+  const existsLaunch = await existsLaunchWithId(launchId);
 
-  if (!existsLaunchWithId(launchId)) {
+  if (!existsLaunch) {
     return res.status(404).json({ message: "Launch not found" });
   }
-  const aborted = abortLaunch(launchId);
+  const aborted = await abortLaunch(launchId);
+
+  if (!aborted) {
+    return res.status(400).json({ error: "Launch not aborted" });
+  }
 
   return res.status(200).json(aborted);
 }
