@@ -1,41 +1,58 @@
-// const launches = require('./launches.mongo');
-
-const launches = new Map();
-
-let latestFlightNumber = 100;
+const launches = require("./launches.mongo");
+const planets = require("./planets.mongo");
 
 const launch = {
   flightNumber: 100,
   mission: "Initial Mars mission",
   rocket: "Super Rocket VII",
-  launchDate: new Date("21-01-2029"),
-  destination: "First attempt to remove Elon Musk from mars",
+  launchDate: new Date("December 27, 2030"),
+  destination: "Kepler-1652 b",
   customers: ["NASA", "Dzika prasa", "Timon & Pumba"],
   upcoming: true,
   success: true,
 };
 
-launches.set(launch.flightNumber, launch);
+saveLaunch(launch);
 
 function existsLaunchWithId(id) {
   return launches.has(id);
 }
 
-function getAllLaunches() {
-  return Array.from(launches.values());
+async function getLatestFlightNumber() {
+  const latestLaunch = await launches.findOne().sort("-flightNumber");
+
+  if (!latestLaunch) return 100;
+
+  return latestLaunch.flightNumber;
 }
 
-function addNewLaunch(launch) {
-  latestFlightNumber++;
-  launches.set(
-    latestFlightNumber,
-    Object.assign(launch, {
-      flightNumber: latestFlightNumber,
-      customers: ["ZTM", "NASA"],
-      upcoming: true,
-      success: true,
-    })
+async function getAllLaunches() {
+  return await launches.find({});
+}
+
+async function saveLaunch(launch) {
+  const planet = await planets.findOne({ keplerName: launch.destination });
+
+  if (!planet) throw new Error("Planet not found");
+
+  return await launches.updateOne(
+    { flightNumber: launch.flightNumber },
+    launch,
+    { upsert: true }
   );
+}
+
+async function scheduleNewLaunch(launch) {
+  const latestLaunchNumber = (await getLatestFlightNumber(launch)) + 1;
+
+  const newLaunch = Object.assign(launch, {
+    upcoming: true,
+    success: true,
+    flightNumber: latestLaunchNumber,
+    customers: ["NASA", "YodaOne"],
+  });
+
+  await saveLaunch(newLaunch);
 }
 
 function abortLaunch(id) {
@@ -49,6 +66,6 @@ function abortLaunch(id) {
 module.exports = {
   existsLaunchWithId,
   getAllLaunches,
-  addNewLaunch,
   abortLaunch,
+  scheduleNewLaunch,
 };

@@ -1,14 +1,16 @@
 const {
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   abortLaunch,
   existsLaunchWithId,
 } = require("../../models/launches.model");
 
-const httpGetAllLaunches = (req, res) => {
-  return res.status(200).json(getAllLaunches());
+const httpGetAllLaunches = async (req, res) => {
+  const launches = await getAllLaunches();
+  return res.status(200).json(launches);
 };
-const httpAddNewLaunch = (req, res) => {
+
+const httpScheduleNewLaunch = async (req, res) => {
   const launch = req.body;
   const { mission, rocket, launchDate, destination } = launch;
 
@@ -18,8 +20,6 @@ const httpAddNewLaunch = (req, res) => {
     });
   }
 
-  addNewLaunch(launch);
-
   launch.launchDate = new Date(launchDate);
 
   if (isNaN(launch.launchDate)) {
@@ -28,9 +28,11 @@ const httpAddNewLaunch = (req, res) => {
     });
   }
 
+  await scheduleNewLaunch(launch);
+
   return res.status(201).json(launch);
 };
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const launchId = Number(req.params.id);
 
   if (!existsLaunchWithId(launchId)) {
@@ -43,6 +45,6 @@ function httpAbortLaunch(req, res) {
 
 module.exports = {
   httpGetAllLaunches,
-  httpAddNewLaunch,
+  httpScheduleNewLaunch,
   httpAbortLaunch,
 };
