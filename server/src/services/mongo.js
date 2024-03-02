@@ -13,7 +13,10 @@ mongoose.connection.on("error", (err) => {
 const connectDatabase = async () => {
   await mongoose.connect(MONGO_URL);
 };
-
+const disconnectDatabase = async () => {
+  await mongoose.disconnect();
+};
 module.exports = {
   connectDatabase,
+  disconnectDatabase,
 };
