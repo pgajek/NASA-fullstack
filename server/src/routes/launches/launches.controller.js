@@ -12,6 +12,7 @@ const httpGetAllLaunches = async (req, res) => {
 
 const httpScheduleNewLaunch = async (req, res) => {
   const launch = req.body;
+
   const { mission, rocket, launchDate, destination } = launch;
 
   if (!mission || !rocket || !launchDate || !destination) {

@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../../app");
 const { connectDatabase, disconnectDatabase } = require("../../services/mongo");
 
-describe("LaunchesAPI", () => {
+describe("LaunchesAPI V1", () => {
   beforeAll(async () => {
     await connectDatabase();
   });
@@ -14,7 +14,7 @@ describe("LaunchesAPI", () => {
   describe(" GET /launches", () => {
     it("should respond with 200 success", async () => {
       const response = await request(app)
-        .get("/launches")
+        .get("/v1/launches")
         .expect(200)
         .expect("Content-Type", /json/);
     });
@@ -41,7 +41,7 @@ describe("LaunchesAPI", () => {
 
     it("should respond with 201 created", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchData)
         .expect("Content-Type", /json/)
         .expect(201);
@@ -55,7 +55,7 @@ describe("LaunchesAPI", () => {
     });
     it("should catch missing required property", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchDataWithoutDate)
         .expect("Content-Type", /json/)
         .expect(400);
@@ -66,7 +66,7 @@ describe("LaunchesAPI", () => {
     });
     it("should catch invalid date", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchDataWithInvalidDate)
         .expect("Content-Type", /json/)
         .expect(400);
