@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:8000";
+const apiUrl = "http://localhost:8000/v1";
 
 async function httpGetPlanets() {
   const response = await fetch(`${apiUrl}/planets`);
